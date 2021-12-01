@@ -48,14 +48,13 @@ class _CreateUserPageState extends State<CreateUserPage> {
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(Colors.grey),
             ),
-            child: const Text('Select Photo',
+            child: const Text('Take Photo',
                 style: TextStyle(
                     color: Color(0xffffffff),
                     fontSize: 18,
                     fontWeight: FontWeight.bold)),
             onPressed: () async {
-              XFile? image =
-                  await picker.pickImage(source: ImageSource.gallery);
+              XFile? image = await picker.pickImage(source: ImageSource.camera);
               setState(() {
                 _faceImage = image;
               });
