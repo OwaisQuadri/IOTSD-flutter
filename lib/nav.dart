@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'users.dart';
-
+import 'logs.dart';
 import 'locks.dart';
 
 class Nav extends StatefulWidget {
@@ -16,7 +16,7 @@ class _nameState extends State<Nav> {
   final List<Widget> _widgetOptions = <Widget>[
     UsersPage(),
     LocksPage(),
-    Text("Logs"),
+    LogsPage(),
   ];
   void _onItemTap(int index) {
     setState(() {

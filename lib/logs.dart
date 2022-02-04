@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import '/http_service.dart';
 import '/nav.dart';
 
-import 'lock_model.dart';
+import 'log_model.dart';
 
-class LocksPage extends StatelessWidget {
+class LogsPage extends StatelessWidget {
   final HttpService httpService = HttpService();
   refresh(context) {
     Navigator.pushReplacement(
@@ -21,7 +22,7 @@ class LocksPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Locks (tap to toggle)")),
+        appBar: AppBar(title: const Text("Logs")),
         body: RefreshIndicator(
           onRefresh: () {
             Navigator.pushReplacement(
@@ -34,29 +35,26 @@ class LocksPage extends StatelessWidget {
             return Future.value(true);
           },
           child: FutureBuilder(
-            future: httpService.getLocks(),
-            builder:
-                (BuildContext context, AsyncSnapshot<List<Lock>> snapshot) {
+            future: httpService.getLog(),
+            builder: (BuildContext context, AsyncSnapshot<List<Log>> snapshot) {
               if (snapshot.hasData) {
-                List<Lock>? locks = snapshot.data;
+                List<Log>? logs = snapshot.data;
                 return Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Card(
                         child: ListView(
-                      children: locks!
+                      children: logs!
                           .map(
-                            (Lock lock) => ListTile(
-                              title: Text(lock.lock_name),
-                              subtitle: lock.status
-                                  ? Text("Locked")
-                                  : Text("Unlocked"),
-                              tileColor: !lock.status
+                            (Log log) => ListTile(
+                              title: Text(log.lock_name),
+                              subtitle: log.status
+                                  ? Text("Locked by " + log.changed_by)
+                                  : Text("Unlocked by " + log.changed_by),
+                              tileColor: !log.status
                                   ? Colors.greenAccent.shade100
                                   : Colors.redAccent.shade100,
-                              onTap: () {
-                                httpService.toggle(lock);
-                                refresh(context);
-                              },
+                              trailing: Text(DateFormat('MMM dd yyyy hh:mm a')
+                                  .format(log.date)),
                             ),
                           )
                           .toList(),

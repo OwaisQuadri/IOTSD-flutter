@@ -5,6 +5,7 @@ import '/user_model.dart';
 import 'package:http/http.dart';
 
 import 'lock_model.dart';
+import 'log_model.dart';
 
 class HttpService {
   final String url = 'https://validation--api.herokuapp.com';
@@ -80,12 +81,27 @@ class HttpService {
     }
   }
 
+  Future<List<Log>> getLog() async {
+    Response res = await get(Uri.parse('$url/status/logs/'), headers: headers);
+    if (res.statusCode == 200) {
+      //success
+      List<dynamic> body = jsonDecode(res.body);
+      List<Log> logs = body.map((dynamic item) => Log.fromJson(item)).toList();
+      return logs;
+    } else if (res.statusCode == 403) {
+      throw "Authentication error";
+    } else {
+      throw "Can't get logs";
+    }
+  }
+
   toggle(Lock lock) async {
     var status = lock.status ? false : true;
 
     Map data = {
       'lock_name': lock.lock_name,
       'status': status,
+      'changed_by': 'admin',
     };
     var setStatusBody = json.encode(data);
     Response res = await post(Uri.parse('$url/status/'),
