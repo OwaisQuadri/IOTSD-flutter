@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/http_service.dart';
+import 'package:flutter_demo/nav.dart';
 import 'package:flutter_demo/user_model.dart';
 import 'package:flutter_demo/users.dart';
 
@@ -21,7 +22,7 @@ class UserDetail extends StatelessWidget {
           Navigator.of(context).pop();
           Navigator.of(context).pop();
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => UsersPage(),
+            builder: (context) => Nav(),
           ));
         },
         backgroundColor: Colors.red,

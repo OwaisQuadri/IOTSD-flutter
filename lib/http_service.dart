@@ -43,11 +43,10 @@ class HttpService {
   }
 
   void createUser({required name, required faceImage, required phone}) async {
-    final image = Im.decodeImage(File(faceImage.path).readAsBytesSync());
+    final image = Im.decodeImage(await File(faceImage.path).readAsBytes());
     final newImageName = name + '.png';
-    File(newImageName).writeAsBytesSync(Im.encodePng(image!));
 
-    List<int> imageBytes = File(newImageName.path).readAsBytesSync();
+    List<int> imageBytes = Im.encodePng(image!);
     String base64Image = base64Encode(imageBytes);
     Map data = {
       'name': name,
