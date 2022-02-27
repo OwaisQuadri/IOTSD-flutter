@@ -1,9 +1,9 @@
 // ignore_for_file: avoid_print
-
+import 'dart:io';
 import 'dart:convert';
 import '/user_model.dart';
 import 'package:http/http.dart';
-
+import 'package:image/image.dart' as Im;
 import 'lock_model.dart';
 import 'log_model.dart';
 
@@ -43,7 +43,11 @@ class HttpService {
   }
 
   void createUser({required name, required faceImage, required phone}) async {
-    List<int> imageBytes = await faceImage.readAsBytes();
+    final image = Im.decodeImage(File(faceImage.path).readAsBytesSync());
+    final newImageName = name + '.png';
+    File(newImageName).writeAsBytesSync(Im.encodePng(image!));
+
+    List<int> imageBytes = File(newImageName.path).readAsBytesSync();
     String base64Image = base64Encode(imageBytes);
     Map data = {
       'name': name,
